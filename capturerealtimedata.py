@@ -31,9 +31,18 @@ def main():
     ### Read the passage below. Real-time data will be captured to predict the likelihood of ADHD.
     """)
 
-    passage = """Once upon a time in a faraway land, there lived a wise old owl. The owl was known throughout the forest for its wisdom and kindness. It spent its days watching over the animals and offering advice to those in need. One day, a young fox approached the owl, seeking guidance on how to find its way home. The owl, with a gentle hoot, pointed the fox in the right direction, and the young fox trotted off happily. The owl watched as the fox disappeared into the woods, knowing that it had helped another creature find its path."""
+    # Extended passage for longer reading duration
+    passage = """Once upon a time in a faraway land, there lived a wise old owl. The owl was known throughout the forest for its wisdom and kindness. It spent its days watching over the animals and offering advice to those in need. One day, a young fox approached the owl, seeking guidance on how to find its way home. The owl, with a gentle hoot, pointed the fox in the right direction, and the young fox trotted off happily. The owl watched as the fox disappeared into the woods, knowing that it had helped another creature find its path. 
 
-    st.text_area("Passage", value=passage, height=200, max_chars=None)
+    Several months passed, and the seasons began to change. As autumn arrived, the leaves turned golden and fell gently to the ground. The owl, now a bit older, still sat perched on its favorite branch, watching over the forest. One crisp morning, a lost rabbit came hopping along, tears in its eyes. The owl listened patiently as the rabbit explained how it had wandered too far from its burrow. With a knowing nod, the owl gave the rabbit some comforting words and pointed it toward the familiar trails leading back to its home.
+
+    Winter came soon after, bringing snow and cold winds to the forest. The wise owl, prepared for the harsh season, wrapped itself in its warm feathers. But even in the coldest of days, it continued to look after the forest dwellers. It guided the birds to safe nests and showed the deer where to find the last bits of food. Each act of kindness made the owl's heart feel fuller, despite the icy weather.
+
+    The months turned again, and spring brought new life to the forest. The trees blossomed, and flowers bloomed across the meadow. The owl, feeling rejuvenated, was visited by many animals that it had helped throughout the year. They came with gifts of gratitude and stories of how the owl’s wisdom had changed their lives. The owl, with a humble smile, listened to each story, grateful for the opportunity to have made a difference.
+
+    As the sun set on that beautiful spring day, the owl closed its eyes, feeling a deep sense of peace and contentment. It had spent its life in service to others, and now, surrounded by friends and the beauty of the forest, it felt truly at home."""
+
+    st.text_area("Passage", value=passage, height=300, max_chars=None)
 
     # Capture control
     if "capturing" not in st.session_state:
@@ -86,9 +95,17 @@ def main():
         # Normalize the input data using the pre-fitted scaler
         scaled_input_data = scaler.transform(input_data)
 
-        # Modify the threshold if necessary
+        # Get prediction probability from the model
         prediction_probability = model.predict_proba(scaled_input_data)[0][1]
         st.write(f"Prediction Probability: {prediction_probability:.2f}")
 
-if __name__ == "__main__":
-    main()
+        # Determine ADHD likelihood based on the prediction probability
+        if prediction_probability > 0.7:
+            st.write("High likelihood of ADHD.")
+        elif prediction_probability > 0.4:
+            st.write("Moderate likelihood of ADHD.")
+        else:
+            st.write("Low likelihood of ADHD.")
+
+    if __name__ == "__main__":
+        main()
